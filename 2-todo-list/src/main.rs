@@ -1,76 +1,9 @@
-//! # rust-todo-cli
-//!
-//! A simple todo cli app written in Rust.
-//!
-//! ## Usage
-//!
-//! To use the app, run the `rust-todo-cli` command followed by one of the available subcommands, as shown below:
-//!
-//! `rust-todo-cli <COMMAND>`
-//!
-//! ## Available Commands
-//!
-//! - `view`: View all tasks.
-//!     - Examples:
-//!         - `rust-todo-cli view`
-//! - `add`: Add a new task.
-//!     - Arguments:
-//!         - `<TASK_NAME>`: The name of the task to add.
-//!     - Options:
-//!         - `[DESCRIPTION]`: The description of the task to add.
-//!         - `[DATE]`: The due date of the task to add.
-//!     - Examples:
-//!         - `rust-todo-cli add "Buy milk"`
-//!         - `rust-todo-cli add "Buy milk" "Pick up milk from the store" "2022-12-15"`
-//! - `remove`: Remove a task.
-//!     - Arguments:
-//!         - `<TASK_NAME>`: The name of the task to remove.
-//!     - Examples:
-//!         - `rust-todo-cli remove "Buy milk"`
-//! - `update`: Update a task.
-//!     - Arguments:
-//!         - `<TASK_NAME>`: The name of the task to update.
-//!     - Options:
-//!         - `--name <NEW_NAME>`: The new name for the task.
-//!         - `--description <DESCRIPTION>`: The new description for the task.
-//!         - `--date <DATE>`: The new due date for the task.
-//!         - `--completed <COMPLETED>`: Whether the task is completed or not (possible values: `true`, `false`).
-//!     - Examples:
-//!         - `rust-todo-cli update "Buy milk" --name "Get groceries" --description "Pick up milk and bread" --date "2022-12-15"`
-//! - `complete`: Complete a task.
-//!     - Arguments:
-//!         - `<TASK_NAME>`: The name of the task to complete.
-//!     - Examples:
-//!         - `rust-todo-cli complete "Buy milk"`
-//! - `uncomplete`: Uncomplete a task.
-//!     - Arguments:
-//!         - `<TASK_NAME>`: The name of the task to uncomplete.
-//!     - Examples:
-//!         - `rust-todo-cli uncomplete "Buy milk"`
-//! - `status`: Show the status of the task.
-//!     - Arguments:
-//!         - `<TASK_NAME>`: The name of the task to show the status of.
-//!     - Examples:
-//!         - `rust-todo-cli status "Buy milk"`
-//! - `clear-completed`: Clear completed tasks.
-//!     - Examples:
-//!         - `rust-todo-cli clear-completed`
-//! - `clear-all`: Clear all tasks.
-//!     - Examples:
-//!         - `rust-todo-cli clear-all`
-//!
-//! ## Options
-//!
-//! - `-h, --help`: Print help information
-//! - `-V, --version`: Print version information
-
 mod file;
 mod task;
 mod todo_list;
 
 use crate::file::*;
 use crate::task::*;
-use crate::todo_list::*;
 use clap::{Args, Parser, Subcommand};
 use std::process;
 
@@ -155,12 +88,12 @@ fn main() {
         args.date.unwrap_or_default(),
         None,
       );
-      task.add(&mut todo_list);
+      todo_list.add(task);
       save_json(todo_list.tasks).unwrap();
     }
     Remove(args) => {
       let task = Task::new(args.name, String::new(), String::new(), None);
-      task.remove(&mut todo_list);
+      todo_list.remove(task);
       save_json(todo_list.tasks).unwrap();
     }
     Update(args) => {
@@ -173,29 +106,42 @@ fn main() {
         process::exit(1);
       }
 
-      let task = get_task(&todo_list, &args.name);
+      let task = todo_list.find(&args.name).unwrap();
       let new_task = Task::new(
         args.new_name.unwrap_or(args.name),
         args.description.unwrap_or(task.description.clone()),
         args.date.unwrap_or(task.date.clone()),
         Some(args.completed.unwrap_or(task.completed)),
       );
-      task.update(&mut todo_list, new_task);
+      todo_list.update(task.to_owned(), new_task);
       save_json(todo_list.tasks).unwrap();
     }
     Complete(args) => {
-      let task = get_task(&todo_list, &args.name);
-      task.complete(&mut todo_list);
+      let task = todo_list.find(&args.name);
+      if task.is_none() {
+        println!("Task \"{}\" not found", args.name);
+        process::exit(1);
+      }
+
+      todo_list.complete(task.unwrap().to_owned());
       save_json(todo_list.tasks).unwrap();
     }
     Uncomplete(args) => {
-      let task = get_task(&todo_list, &args.name);
-      task.uncomplete(&mut todo_list);
+      let task = todo_list.find(&args.name);
+      if task.is_none() {
+        println!("Task \"{}\" not found", args.name);
+        process::exit(1);
+      }
+      todo_list.uncomplete(task.unwrap().to_owned());
       save_json(todo_list.tasks).unwrap();
     }
     Status(args) => {
-      let task = get_task(&todo_list, &args.name);
-      task.status();
+      let task = todo_list.find(&args.name);
+      if task.is_none() {
+        println!("Task \"{}\" not found", args.name);
+        process::exit(1);
+      }
+      task.unwrap().status();
     }
     ClearCompleted => {
       todo_list.clear_completed();
@@ -205,14 +151,5 @@ fn main() {
       todo_list.clear_all();
       save_json(todo_list.tasks).unwrap();
     }
-  }
-}
-
-fn get_task(todo_list: &TodoList, task_name: &String) -> Task {
-  if let Some(task) = todo_list.find(task_name) {
-    task.clone()
-  } else {
-    println!("Task \"{}\" not found", task_name);
-    process::exit(1);
   }
 }

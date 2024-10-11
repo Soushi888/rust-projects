@@ -1,14 +1,8 @@
 [
   {
-    "name": "Learn Javascript",
-    "description": "By doing 5 projects",
-    "date": "2024-10-08",
-    "completed": false
-  },
-  {
-    "name": "Learn Holochain",
-    "description": "By doing 5 projects",
-    "date": "2024-10-08",
-    "completed": false
+    "name": "Learn something else",
+    "description": "Because its important",
+    "date": "2024-10-11",
+    "completed": true
   }
 ]
