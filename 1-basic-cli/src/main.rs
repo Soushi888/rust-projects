@@ -32,7 +32,10 @@ fn main() -> io::Result<()> {
         let content = read_file(filename)?;
         println!("{}", content);
       }
-      "n" | "" => break,
+      "n" | "" => {
+        println!("Bye!");
+        break;
+      }
       _ => println!("Invalid input. Please enter y or n."),
     }
   }
