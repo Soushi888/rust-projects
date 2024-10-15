@@ -1,4 +1,3 @@
-use crate::todo_list::TodoList;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
