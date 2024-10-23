@@ -6,7 +6,6 @@ mod todo_list;
 
 use crate::file::*;
 use crate::task::*;
-use std::process;
 
 use clap::Parser;
 use cli::{Cli, Commands::*};
@@ -32,31 +31,31 @@ fn main() -> TodoResult<()> {
       );
 
       todo_list.add(task)?;
-      save_json(todo_list.tasks.clone())?;
+      save_json(todo_list)?;
 
       Ok(())
     }
     Remove(args) => {
       todo_list.remove(&args.name)?;
-      save_json(todo_list.tasks)?;
+      save_json(todo_list)?;
 
       Ok(())
     }
     Update(args) => {
       todo_list.update(&args.name.clone(), args)?;
-      save_json(todo_list.tasks.clone())?;
+      save_json(todo_list)?;
 
       Ok(())
     }
     Complete(args) => {
       todo_list.complete(&args.name)?;
-      save_json(todo_list.tasks)?;
+      save_json(todo_list)?;
 
       Ok(())
     }
     Uncomplete(args) => {
       todo_list.uncomplete(&args.name)?;
-      save_json(todo_list.tasks)?;
+      save_json(todo_list)?;
 
       Ok(())
     }
@@ -68,13 +67,13 @@ fn main() -> TodoResult<()> {
     }
     ClearCompleted => {
       todo_list.clear_completed();
-      save_json(todo_list.tasks)?;
+      save_json(todo_list)?;
 
       Ok(())
     }
     ClearAll => {
       todo_list.clear_all();
-      save_json(todo_list.tasks)?;
+      save_json(todo_list)?;
 
       Ok(())
     }

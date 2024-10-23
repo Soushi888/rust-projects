@@ -23,9 +23,9 @@ pub fn load_json() -> TodoResult<TodoList> {
   }
 }
 
-pub fn save_json(mut todo_list: Vec<Task>) -> TodoResult<()> {
-  todo_list.sort_by_key(|t| t.date.clone());
-  let json = serde_json::to_string_pretty(&todo_list)?;
+pub fn save_json(mut todo_list: TodoList) -> TodoResult<()> {
+  todo_list.tasks.sort_by_key(|t| t.date.clone());
+  let json = serde_json::to_string_pretty(&todo_list.tasks)?;
   fs::write("todo.json", json)?;
 
   Ok(())

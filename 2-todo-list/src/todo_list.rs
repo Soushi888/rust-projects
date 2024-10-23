@@ -1,13 +1,10 @@
-use std::process;
-
 use crate::{
   cli::UpdateTaskArgs,
   error::{TodoError, TodoResult},
   task::Task,
 };
-use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
+#[derive(Debug, Clone)]
 pub struct TodoList {
   pub tasks: Vec<Task>,
 }
