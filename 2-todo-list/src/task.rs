@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::fmt::Display;
+use std::fmt::{self, Display};
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Task {
@@ -10,7 +10,7 @@ pub struct Task {
 }
 
 impl Display for Task {
-  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     let completed = if self.completed { "x" } else { " " };
     write!(
       f,
