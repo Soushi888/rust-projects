@@ -14,6 +14,7 @@ pub enum Commands {
   View,
   /// Add a new task
   Add(AddTaskArgs),
+  /// Remove a task
   Remove(TaskNameArg),
   /// Update a task
   Update(UpdateTaskArgs),

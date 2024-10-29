@@ -14,6 +14,10 @@ pub enum TodoError {
   DuplicateTask,           // Duplicate task
 }
 
+// Implement Error trait for our custom error type
+impl error::Error for TodoError {}
+
+// Implement Display trait for our custom error type
 impl fmt::Display for TodoError {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     match self {
@@ -26,14 +30,12 @@ impl fmt::Display for TodoError {
   }
 }
 
+// Implement Debug trait that output the full error for our custom error type
 impl fmt::Debug for TodoError {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     write!(f, "{}", self)
   }
 }
-
-// Implement Error trait for our custom error type
-impl error::Error for TodoError {}
 
 // Implement From trait for IO errors
 impl From<std::io::Error> for TodoError {
