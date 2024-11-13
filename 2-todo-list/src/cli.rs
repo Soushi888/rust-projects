@@ -1,6 +1,6 @@
 use clap::{Args, Parser, Subcommand};
 
-#[derive(Debug, Parser)]
+#[derive(Parser)]
 #[clap(author = "Soushi888", version)]
 /// Simple todo cli app
 pub struct Cli {
@@ -8,7 +8,7 @@ pub struct Cli {
   pub command: Commands,
 }
 
-#[derive(Subcommand, Debug, Clone)]
+#[derive(Subcommand)]
 pub enum Commands {
   /// View all tasks
   View,
@@ -30,7 +30,7 @@ pub enum Commands {
   ClearAll,
 }
 
-#[derive(Args, Debug, Clone)]
+#[derive(Args)]
 pub struct AddTaskArgs {
   /// Task name
   pub name: String,
@@ -40,13 +40,13 @@ pub struct AddTaskArgs {
   pub date: Option<String>,
 }
 
-#[derive(Args, Debug, Clone)]
+#[derive(Args)]
 pub struct TaskNameArg {
   /// Task name
   pub name: String,
 }
 
-#[derive(Args, Debug, Clone)]
+#[derive(Args)]
 pub struct UpdateTaskArgs {
   pub name: String,
   #[clap(long, short)]
