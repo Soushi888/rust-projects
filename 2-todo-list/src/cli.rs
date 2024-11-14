@@ -5,11 +5,11 @@ use clap::{Args, Parser, Subcommand};
 /// Simple todo cli app
 pub struct Cli {
   #[clap(subcommand)]
-  pub command: Commands,
+  pub command: Command,
 }
 
 #[derive(Subcommand)]
-pub enum Commands {
+pub enum Command {
   /// View all tasks
   View,
   /// Add a new task

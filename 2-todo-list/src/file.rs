@@ -16,7 +16,7 @@ pub fn load_json() -> TodoResult<TodoList> {
   match from_reader(&file) {
     Ok(tasks) => Ok(TodoList { tasks }),
     Err(_) => {
-      to_writer(file, &Vec::<Task>::new())?;
+      save_json(TodoList::new())?;
       println!("Created new todo list");
       Ok(TodoList::new())
     }

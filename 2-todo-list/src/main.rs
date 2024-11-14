@@ -8,7 +8,7 @@ use crate::file::*;
 use crate::task::*;
 
 use clap::Parser;
-use cli::{Cli, Commands::*};
+use cli::{Cli, Command::*};
 use error::TodoError;
 use error::TodoResult;
 
