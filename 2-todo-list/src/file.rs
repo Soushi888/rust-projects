@@ -1,7 +1,6 @@
 use crate::error::TodoResult;
-use crate::task::*;
 use crate::todo_list::*;
-use serde_json::{from_reader, to_writer};
+use serde_json::from_reader;
 use std::fs;
 use std::fs::OpenOptions;
 
@@ -16,7 +15,7 @@ pub fn load_json() -> TodoResult<TodoList> {
   match from_reader(&file) {
     Ok(tasks) => Ok(TodoList { tasks }),
     Err(_) => {
-      save_json(TodoList::new())?;
+      fs::write("todo.json", Vec::new())?;
       println!("Created new todo list");
       Ok(TodoList::new())
     }
