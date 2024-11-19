@@ -19,6 +19,7 @@
     - [Project Overview](./projects/cli/overview.md)
     - [Design and Implementation](./projects/cli/implementation.md)
     - [CLI Best Practices](./projects/cli/best-practices.md)
+    - [Basic File Reader](./projects/cli/1-basic-file-reader.md)
  - [Todo List Applications](./projects/todo-list/README.md)
     - [Project Requirements](./projects/todo-list/requirements.md)
     - [Data Persistence](./projects/todo-list/persistence.md)

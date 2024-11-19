@@ -13,3 +13,13 @@ This subsection focuses on building command-line interface (CLI) applications in
 - Explore Rust's standard library and external crates
 - Implement robust error handling
 - Design a user-friendly command-line interface
+
+## CLI Project Tutorials
+
+Our CLI project tutorials cover a range of complexity levels and learning objectives:
+
+1. **Basic File Reader**: 
+   - Learn fundamental Rust concepts
+   - Practice file I/O and error handling
+   - Understand command-line argument parsing
+   - Build an interactive CLI application
