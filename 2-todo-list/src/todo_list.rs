@@ -1,3 +1,5 @@
+use chrono::Local;
+
 use crate::{
   cli::UpdateTaskArgs,
   error::{TodoError, TodoResult},
@@ -15,7 +17,7 @@ impl TodoList {
   }
 
   pub fn add(&mut self, mut task: Task) -> TodoResult<()> {
-    let now = chrono::Local::now().format("%Y-%m-%d").to_string();
+    let now = Local::now().format("%Y-%m-%d").to_string();
     if task.date.is_empty() {
       task.date = now;
     }
@@ -95,8 +97,12 @@ impl TodoList {
       println!("No tasks found");
       return;
     }
-    for task in &self.tasks {
-      println!("{}", task);
+    // for task in &self.tasks {
+    //   println!("{}", task);
+    // }
+
+    for (i, task) in self.tasks.iter().enumerate() {
+      println!("{}. {}", i + 1, task);
     }
   }
 
