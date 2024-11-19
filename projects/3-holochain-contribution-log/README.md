@@ -1,7 +1,7 @@
-# Distributed Todo List with Holochain
+# Distributed Contribution Log with Holochain
 
 ## Project Overview
-This project introduces distributed computing concepts using Holochain, building upon the previous CLI todo list application. It demonstrates how to create a decentralized, peer-to-peer todo list application.
+This project introduces distributed computing concepts using Holochain, building upon our previous projects. It demonstrates how to create a decentralized, peer-to-peer contribution logging system where users can track and share their contributions to various projects.
 
 ## Learning Objectives
 - Understand distributed computing principles
@@ -24,12 +24,12 @@ This project introduces distributed computing concepts using Holochain, building
 
 ## Recommended Project Structure
 ```
-3-holochain-todo-list/
+3-holochain-contribution-log/
 ├── Cargo.toml       # Project configuration
 ├── src/             # Source code directory
 │   ├── lib.rs       # Core library code
 │   └── main.rs      # Application entry point
-├── holochain-todo-list-spec.md  # Project specification
+├── contribution-log-spec.md  # Project specification
 └── README.md        # Project documentation
 ```
 
@@ -37,7 +37,7 @@ This project introduces distributed computing concepts using Holochain, building
 ```bash
 # Ensure Holochain development environment is set up
 # Navigate to the project directory
-cd 3-holochain-todo-list
+cd 3-holochain-contribution-log
 
 # Build the project
 cargo build
@@ -50,16 +50,27 @@ cargo test
 ```
 
 ## Distributed Features
-- Peer-to-peer todo list synchronization
-- Decentralized task management
+- Peer-to-peer contribution log synchronization
+- Decentralized contribution tracking
 - No central server required
 - Resilient and censorship-resistant design
+- Contribution verification and validation
+
+## Core Functionality
+- Log new contributions with detailed descriptions
+- Track contribution dates and time spent
+- Categorize contributions by project and type
+- Add tags and links to related resources
+- View contribution history and statistics
+- Collaborate and verify others' contributions
 
 ## Challenges and Learning Opportunities
 - Implement advanced synchronization mechanisms
 - Handle conflict resolution in distributed systems
 - Explore Holochain-specific data validation
 - Implement secure, decentralized authentication
+- Design efficient contribution verification systems
+- Link contributions to agent identity (just a name for now)
 
 ## Next Steps
 Prepare for more complex distributed application patterns and real-world system design challenges.
