@@ -617,6 +617,7 @@ pub struct ResourceItem {
     pub quantity: f64,
     pub unit: String,
 }
+```
 
 ## Technical Requirements
 
