@@ -10,58 +10,117 @@ This section provides a straightforward guide to designing and implementing a ba
 - **Modularity**: Break down the application into small, manageable components.
 - **Error Handling**: Use Rust's powerful error handling mechanisms to create robust applications.
 
-## Implementation Steps
+## Project Structure
 
-### 1. Setting Up the Project
+The project consists of a single `main.rs` file that implements a simple file reader CLI tool. Here's the breakdown of its components:
 
-- Use Cargo to create a new Rust project.
-- Organize your code into modules for clarity and reusability.
+### Core Components
 
-```bash
-cargo new my_cli_project
-cd my_cli_project
-```
+1. **Main Function**
+   - Handles command-line arguments
+   - Implements an interactive loop for reading multiple files
+   - Uses proper error handling with `io::Result`
 
-### 2. Basic Command-Line Parsing
+2. **File Reading Function**
+   - Encapsulated file reading logic
+   - Uses Rust's standard I/O operations
+   - Implements error handling
 
-- Utilize Rust's standard library to handle command-line arguments.
-- Implement a simple argument parser that can be extended as needed.
+## Implementation Details
+
+### Command-Line Arguments
 
 ```rust
 let args: Vec<String> = std::env::args().collect();
 if args.len() < 2 {
-    eprintln!("Usage: {} <command>", args[0]);
-    return;
+    eprintln!("Usage: {} <filename>", args[0]);
+    return Ok(());
+}
+let filename = &args[1];
+```
+
+### File Reading Implementation
+
+```rust
+/// Reads the contents of a file and returns them as a string.
+///
+/// ## Errors
+///
+/// Returns an error if there was a problem opening or reading the file.
+fn read_file(filename: &str) -> io::Result<String> {
+    let file = File::open(filename)?;
+    let mut reader = io::BufReader::new(file);
+    let mut content = String::new();
+    reader.read_to_string(&mut content)?;
+    Ok(content)
 }
 ```
 
-### 3. Implementing Core Functionality
-
-- Define the main logic of your CLI tool.
-- Ensure that each function is focused and reusable.
+### Interactive Loop
 
 ```rust
-fn execute_command(command: &str) {
-    match command {
-        "greet" => println!("Hello, world!"),
-        _ => eprintln!("Unknown command"),
+loop {
+    print!("Do you want to read another file? (y/n): ");
+    io::stdout().flush()?;
+
+    let mut input = String::new();
+    io::stdin().read_line(&mut input)?;
+
+    match input.trim().to_lowercase().as_str() {
+        "y" => {
+            print!("Enter filename: ");
+            io::stdout().flush()?;
+
+            let mut filename = String::new();
+            io::stdin().read_line(&mut filename)?;
+            let filename = filename.trim();
+
+            let content = read_file(filename)?;
+            println!("{}", content);
+        }
+        "n" | "" => {
+            println!("Bye!");
+            break;
+        }
+        _ => println!("Invalid input. Please enter y or n."),
     }
 }
 ```
 
-### 4. Error Handling
+## Key Rust Features Demonstrated
 
-- Use `Result` and `Option` types to manage errors gracefully.
-- Provide meaningful error messages to guide the user.
+1. **Error Handling**
+   - Use of `Result` type
+   - The `?` operator for error propagation
+   - Proper error messages
 
-```rust
-fn read_file(filename: &str) -> Result<String, io::Error> {
-    let mut file = File::open(filename)?;
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)?;
-    Ok(contents)
-}
+2. **Input/Output**
+   - File operations with `std::fs`
+   - Standard input/output handling
+   - Buffered reading for efficiency
+
+3. **Control Flow**
+   - Pattern matching with `match`
+   - Loop control with `break`
+   - Early returns
+
+4. **String Manipulation**
+   - String creation and modification
+   - String trimming and case conversion
+   - String ownership and borrowing
+
+## Testing the Implementation
+
+To run the program:
+
+```bash
+cargo run -- example.txt
 ```
+
+The program will:
+1. Read and display the content of example.txt
+2. Ask if you want to read another file
+3. Continue based on your input (y/n)
 
 ## Conclusion
 

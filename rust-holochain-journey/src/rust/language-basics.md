@@ -1,299 +1,470 @@
-# Language Basics
+# Rust Language Basics
 
-## Variables and Mutability
+## Introduction
+Welcome to Rust! If you're new to programming or coming from another programming language, you're in the right place. Rust is a modern programming language that focuses on three key principles:
+1. **Safety**: Rust prevents common programming mistakes at compile-time
+2. **Concurrency**: Rust makes it easier to write programs that use multiple processors efficiently
+3. **Performance**: Rust code runs as fast as C and C++
 
-In programming, a variable is a name given to a value. In Rust, variables are immutable by default. This means once a value is bound to a name, you can't change that value. Variables are useful for storing and reusing values in your code, and they are also useful for making your code more readable.
+This guide will take you through the basics, assuming no prior Rust knowledge.
+
+## 1. Variables and Types
+
+### What is a Variable?
+A variable is like a labeled box that holds a value. Think of it as giving a name to a piece of data so you can use it later.
+
+### Variables and Mutability
+In Rust, variables are "immutable" (cannot be changed) by default. This helps prevent accidental changes to your data.
 
 ```rust
-// Variables are immutable by default in Rust
-let x = 5; // This variable cannot be modified
-// x = 6; // This would cause an error because x is immutable
+// Immutable variable - like writing in stone
+let x = 5;          // Once set to 5, x can never change
+// x = 6;          // ❌ This would cause an error!
 
-let mut y = 5; // Using 'mut' keyword makes the variable mutable
-y = 6; // This is allowed because y is mutable
+// Mutable variable - like writing in sand
+let mut y = 5;      // Adding 'mut' makes y changeable
+y = 6;              // ✅ This is allowed because y is mutable
 ```
 
-### Shadowing
-You can declare a new variable with the same name as a previous variable:
+### Basic Data Types
+Rust needs to know exactly what type of data you're working with. Here are the most common types:
 
 ```rust
-// Shadowing allows us to reuse variable names
-let x = 5;          // First x
-let x = x + 1;      // Create new x, using the value of previous x
-let x = x * 2;      // Create another new x, using the value of previous x
+// Numbers
+let integer: i32 = 42;        // Whole numbers (i32 means 32-bit integer)
+let float: f64 = 3.14;        // Decimal numbers (f64 means 64-bit float)
+let boolean: bool = true;     // true or false values
+let character: char = 'A';    // Single characters (notice the single quotes)
+
+// Compound Types
+let tuple: (i32, f64) = (42, 3.14);     // A group of different types
+let array: [i32; 3] = [1, 2, 3];        // A list of same-type items
+
+// Accessing tuple values
+let first_number = tuple.0;    // Gets 42 (tuples start counting at 0)
+let pi = tuple.1;             // Gets 3.14
+
+// Accessing array values
+let first_item = array[0];    // Gets 1 (arrays start counting at 0)
 ```
 
-## Data Types
-
-### Scalar Types
-
-#### Integers
-- Signed: `i8`, `i16`, `i32`, `i64`, `i128`, `isize`
-- Unsigned: `u8`, `u16`, `u32`, `u64`, `u128`, `usize`
+### String Types
+Rust has two main ways to handle text:
+1. `&str` (string slice) - Like a view into some text
+2. `String` - Like a box that owns and can modify text
 
 ```rust
-// Signed integers can hold both positive and negative values
-let a: i32 = -42;   // 32-bit signed integer
-// Unsigned integers can only hold positive values
-let b: u32 = 42;    // 32-bit unsigned integer
+// String literal (&str) - Think of it as borrowed text
+let greeting = "Hello";       // Fixed text that can't change
+
+// Owned String - Think of it as your own notepad
+let mut name = String::from("World");    // Text you can change
+name.push_str("!");                      // Adds "!" to the end
+
+// Combining strings
+let message = format!("{} {}", greeting, name);  // "Hello World!"
 ```
 
-#### Floating-Point
-- `f32`: Single precision
-- `f64`: Double precision (default)
+## 2. Functions and Control Flow
 
+### What is a Function?
+A function is like a recipe - it takes ingredients (parameters), follows steps, and produces a result. Functions help organize code into reusable pieces.
+
+### Function Basics
 ```rust
-// Floating point numbers for decimal values
-let x = 2.0;        // f64 type (double precision) is the default
-let y: f32 = 3.0;   // Explicitly specified as f32 (single precision)
-```
-
-#### Boolean
-```rust
-// Boolean type can only be true or false
-let t = true;       // Type inference determines this is a bool
-let f: bool = false; // Explicitly typed as bool
-```
-
-#### Character
-```rust
-// Char type represents a Unicode scalar value
-let c = 'z';            // Single ASCII character
-let heart_eyed_cat = '😻'; // Unicode emoji character
-```
-
-### Compound Types
-
-#### Tuples
-Fixed-length collection of values of different types:
-
-```rust
-// Tuples can store multiple values of different types
-let tup: (i32, f64, bool) = (500, 6.4, true);  // Explicit type annotation
-let (x, y, z) = tup;    // Destructuring: assign each value to a variable
-let first = tup.0;      // Access tuple elements using dot notation and index
-```
-
-#### Arrays
-Fixed-length collection of values of the same type:
-
-```rust
-// Arrays are fixed-length collections of same-type elements
-let arr = [1, 2, 3, 4, 5];          // Array initialization
-let first = arr[0];                  // Array indexing (zero-based)
-let arr_with_same_value = [3; 5];    // Initialize array with 5 elements, all set to 3
-```
-
-## Functions as I/O Systems
-
-Functions in Rust can be thought of as input/output systems that process data. They can:
-1. Accept inputs (parameters)
-2. Process the data
-3. Produce an output (return value)
-
-### Basic Function Structure
-```rust
-// Function that takes two i32 parameters and returns an i32
-//             inputs        output
-//             ↓↓↓↓↓↓         ↓↓↓
-fn process(x: i32, y: i32) -> i32 {
-    x + y  // Implicit return (no semicolon needed)
-}
-```
-
-### Input Types
-Functions can accept zero or more inputs as parameters:
-```rust
-// Function with no parameters and no return value
-fn say_hello() {
-    println!("Hello!");
+// Basic function that adds two numbers
+fn add(x: i32, y: i32) -> i32 {    // -> i32 means "returns a number"
+    x + y  // No semicolon means "return this value"
 }
 
-// Function that takes one parameter and returns its square
-fn square(x: i32) -> i32 {
-    x * x
-}
-
-// Function that combines two string slices into a new String
-fn combine_strings(s1: &str, s2: &str) -> String {
-    format!("{} {}", s1, s2)
-}
-```
-
-### Output Types
-Functions can have different output behaviors:
-```rust
-// Function that only prints - returns unit type '()'
-fn log_number(x: i32) {
-    println!("Number is: {}", x);
-}
-
-// Function that doubles its input and returns the result
-fn double(x: i32) -> i32 {
-    x * 2
-}
-
-// Function returning multiple values using a tuple
-fn split_string(s: &str) -> (String, String) {
-    let mid = s.len() / 2;
-    let first = s[..mid].to_string();    // First half of string
-    let second = s[mid..].to_string();   // Second half of string
-    (first, second)
-}
-```
-
-### Early Returns
-Functions can have multiple exit points using `return`:
-```rust
-// Function demonstrating early return with Option type
+// Function that might not have a result
 fn divide(x: f64, y: f64) -> Option<f64> {
     if y == 0.0 {
-        return None;  // Early return for division by zero
+        None                // Return nothing if dividing by zero
+    } else {
+        Some(x / y)        // Return the result if safe
     }
-    Some(x / y)      // Return Some containing the division result
 }
+
+// Using our functions
+let sum = add(5, 3);           // sum becomes 8
+let result = divide(10.0, 2.0); // result becomes Some(5.0)
+let bad = divide(10.0, 0.0);    // bad becomes None
 ```
 
-## Control Flow
-
-Control flow refers to the order in which instructions in a program are executed. It's the heart of programming, as it allows us to make decisions, repeat actions, and skip over certain parts of code. Control flow is important because it allows us to write more efficient and flexible code. It also makes it easier to debug our code when something doesn't work as intended.
-
-
-### If Expressions
-
-
+### Control Flow
+Control flow is how your program makes decisions and repeats tasks.
 
 ```rust
-// Example of if-else control flow
+// If expressions - Making decisions
 let number = 6;
-
-if number % 4 == 0 {
-    println!("number is divisible by 4");
-} else if number % 3 == 0 {
-    println!("number is divisible by 3");
+if number % 2 == 0 {           // % 2 checks if number is even
+    println!("It's even!");
 } else {
-    println!("number is not divisible by 4 or 3");
+    println!("It's odd!");
+}
+
+// Match expressions - Like a sophisticated switch statement
+let favorite_color = "blue";
+match favorite_color {
+    "red" => println!("Red like roses!"),
+    "blue" => println!("Blue like the sky!"),
+    "green" => println!("Green like grass!"),
+    _ => println!("Some other color!"),  // _ means "anything else" or "default"
 }
 ```
 
-### Loops
-
-Loops are a fundamental control flow construct used to execute a set of instructions multiple times. Loops are important because they allow us to write more efficient and less repetitive code. They also make it easier to debug our code when something doesn't work as intended. Loops are also used to iterate over collections of data, such as arrays or vectors, and to perform operations on each element in the collection.
-
-
-#### loop
-Infinite loop until explicitly broken:
-
+### Loops - Doing Things Repeatedly
 ```rust
-// Loop with a break condition returning a value
-let mut counter = 0;
-let result = loop {
-    counter += 1;
-    if counter == 10 {
-        break counter * 2;    // Break with a value to be assigned to result
+// For loop - When you know how many times to repeat
+for i in 0..5 {              // Counts from 0 to 4
+    println!("Count: {}", i);
+}
+
+// While loop - Repeat while a condition is true
+let mut count = 0;
+while count < 5 {
+    println!("Count: {}", count);
+    count += 1;              // Add 1 to count
+}
+
+// Loop - Keep going until told to stop
+let mut count = 0;
+let result = loop {          // Keep going until break
+    count += 1;
+    if count == 10 {
+        break count;         // Stop and return count
     }
 };
 ```
 
-#### while
-Conditional loop:
+## 3. Structs and Methods
 
+### What is a Struct?
+A struct is like a custom blueprint for creating data. It lets you group related pieces of data together.
+
+### Basic Struct
 ```rust
-// While loop with a countdown
-let mut number = 3;
-while number != 0 {
-    println!("{}!", number);
-    number -= 1;
-}
-```
-
-#### for
-Iterate over collections:
-
-```rust
-// For loop iterating over array elements
-let a = [10, 20, 30, 40, 50];
-for element in a.iter() {     // Iterate over array elements
-    println!("the value is: {}", element);
+// Define a blueprint for a Person
+struct Person {
+    name: String,           // Every person has a name
+    age: u32,              // and an age (u32 means positive number)
 }
 
-// For loop with range
-for number in (1..4) {        // Iterate over range 1 to 3 (4 is exclusive)
-    println!("{}!", number);
-}
-```
+// Add functionality to Person
+impl Person {
+    // Constructor - like a factory for making new People
+    fn new(name: String, age: u32) -> Person {
+        Person { name, age }    // Create a new Person
+    }
 
-## Pattern Matching
-
-### match Expression
-```rust
-// Example of pattern matching with match expression
-let number = 13;
-match number {
-    1 => println!("One!"),
-    2 | 3 | 5 | 7 | 11 => println!("This is a prime"),
-    13..=19 => println!("A teen"),
-    _ => println!("Ain't special"),
-}
-```
-
-## Error Handling
-
-For detailed error handling examples and explanations, see [Error Handling](./error-handling.md).
-
-## Imports and Modules
-
-### Basic Import
-```rust
-// Import a specific module
-use std::io;
-// Import a specific trait
-use std::io::Write;
-// Import multiple items
-use std::{io, fs};
-// Import all public items
-use std::io::*;
-```
-
-### Module Creation
-```rust
-// Create a new module named 'math'
-mod math {
-    // Public function within the module
-    pub fn add(x: i32, y: i32) -> i32 {
-        x + y
+    // Method - something a Person can do
+    fn introduce(&self) {       // &self means "the Person using this method"
+        println!("Hi! I'm {} and I'm {} years old", self.name, self.age);
     }
 }
 
-// Use the 'add' function from the 'math' module
-use math::add;
+// Using our Person struct
+let alice = Person::new(String::from("Alice"), 30);
+alice.introduce();  // Prints: Hi! I'm Alice and I'm 30 years old
 ```
 
-## Memory Management
+## 4. Enums - Creating Custom Types with Multiple Variants
 
-### Ownership
-- Each value has an owner
-- Only one owner at a time
-- Value is dropped when owner goes out of scope
+### What is an Enum?
+An enum (enumeration) is a type that can be one of several variants. Think of it like a set of options where a value must be exactly one of those options. For example, a card suit must be either Hearts, Diamonds, Clubs, or Spades - nothing else.
+
+### Basic Enum
+```rust
+// Define an enum for card suits
+enum CardSuit {
+    Hearts,    // Each variant is like a possible value
+    Diamonds,
+    Clubs,
+    Spades,
+}
+
+// Using the enum
+let my_suit = CardSuit::Hearts;  // Use :: to access a variant
+
+// Match with enums
+match my_suit {
+    CardSuit::Hearts => println!("♥"),
+    CardSuit::Diamonds => println!("♦"),
+    CardSuit::Clubs => println!("♣"),
+    CardSuit::Spades => println!("♠"),
+}
+```
+
+### Enums with Data
+Enum variants can hold data, making them very powerful:
+
+```rust
+// Enum where each variant can hold different types of data
+enum Message {
+    Quit,                       // No data
+    Move { x: i32, y: i32 },   // Named fields like a struct
+    Write(String),             // Single piece of data
+    ChangeColor(i32, i32, i32), // Multiple pieces of data
+}
+
+// Using enum with data
+let messages = vec![
+    Message::Quit,
+    Message::Move { x: 3, y: 4 },
+    Message::Write(String::from("hello")),
+    Message::ChangeColor(255, 0, 0),
+];
+
+for msg in messages {
+    match msg {
+        Message::Quit => println!("Quit application"),
+        Message::Move { x, y } => println!("Move to ({}, {})", x, y),
+        Message::Write(text) => println!("Text message: {}", text),
+        Message::ChangeColor(r, g, b) => println!("Change color to RGB({},{},{})", r, g, b),
+    }
+}
+```
+
+### Methods on Enums
+Just like structs, enums can have methods:
+
+```rust
+enum Shape {
+    Circle(f64),                // radius
+    Rectangle(f64, f64),        // width, height
+    Triangle(f64, f64, f64),    // three sides
+}
+
+impl Shape {
+    // Calculate area for any shape variant
+    fn area(&self) -> f64 {
+        match self {
+            Shape::Circle(radius) => std::f64::consts::PI * radius * radius,
+            Shape::Rectangle(width, height) => width * height,
+            Shape::Triangle(a, b, c) => {
+                // Heron's formula
+                let s = (a + b + c) / 2.0;
+                (s * (s - a) * (s - b) * (s - c)).sqrt()
+            }
+        }
+    }
+}
+
+// Using the enum method
+let shapes = vec![
+    Shape::Circle(5.0),
+    Shape::Rectangle(4.0, 3.0),
+    Shape::Triangle(3.0, 4.0, 5.0),
+];
+
+for shape in shapes {
+    println!("Area: {:.2}", shape.area()); // Prints area to 2 decimal places
+}
+```
+
+### Option Enum - A Special Case
+Rust has a built-in enum called `Option` that's used everywhere:
+
+```rust
+// Option is defined like this in the standard library
+enum Option<T> {
+    Some(T),   // Contains a value of type T
+    None,      // Represents no value
+}
+
+// Using Option
+fn divide(numerator: f64, denominator: f64) -> Option<f64> {
+    if denominator == 0.0 {
+        None                // Return None for division by zero
+    } else {
+        Some(numerator / denominator)  // Return Some containing the result
+    }
+}
+
+// Working with Option values
+let result = divide(10.0, 2.0);
+match result {
+    Some(x) => println!("Result: {}", x),
+    None => println!("Cannot divide by zero"),
+}
+
+// Shorter way using if let
+if let Some(x) = divide(10.0, 2.0) {
+    println!("Result: {}", x);
+}
+```
+
+### Result Enum - Another Special Case
+`Result` is another built-in enum for handling success and failure:
+
+```rust
+// Result is defined like this in the standard library
+enum Result<T, E> {
+    Ok(T),    // Success case containing value of type T
+    Err(E),   // Error case containing error of type E
+}
+
+// Using Result
+fn parse_number(s: &str) -> Result<i32, String> {
+    match s.parse::<i32>() {
+        Ok(num) => Ok(num),
+        Err(_) => Err(String::from("Failed to parse number")),
+    }
+}
+
+// Working with Results
+match parse_number("42") {
+    Ok(num) => println!("Number: {}", num),
+    Err(e) => println!("Error: {}", e),
+}
+
+// Using if let with Result
+if let Ok(num) = parse_number("42") {
+    println!("Got number: {}", num);
+}
+```
+
+### Pattern Matching with Enums
+Rust ensures you handle all possible enum variants:
+
+```rust
+enum Weather {
+    Sunny,
+    Cloudy,
+    Rainy,
+    Snowy,
+}
+
+fn get_activity(weather: Weather) -> String {
+    match weather {
+        Weather::Sunny => String::from("Go for a walk!"),
+        Weather::Cloudy => String::from("Could be good for photography"),
+        Weather::Rainy => String::from("Read a book inside"),
+        Weather::Snowy => String::from("Build a snowman"),
+        // No need for _ => ... because we covered all cases!
+    }
+}
+
+// If we only care about some cases
+let weather = Weather::Sunny;
+if let Weather::Sunny = weather {
+    println!("It's a beautiful day!");
+}
+```
+
+Remember: Enums are one of Rust's most powerful features because they:
+1. Make impossible states impossible to represent
+2. Keep related data and logic together
+3. Work great with pattern matching
+4. Help catch errors at compile time
+
+## 5. Collections
+
+### What are Collections?
+Collections are ways to store multiple values together. They're like containers for your data.
+
+### Vectors (Dynamic Arrays)
+A vector is like a growable list - it can hold any number of items of the same type.
+
+```rust
+// Creating vectors
+let mut numbers: Vec<i32> = Vec::new();  // Empty vector
+numbers.push(1);                         // Add 1
+numbers.push(2);                         // Add 2
+
+// Vector with initial values
+let numbers = vec![1, 2, 3];            // Shorthand for creating with values
+
+// Getting values
+let first = &numbers[0];                // Get first item (might crash)
+let first = numbers.get(0);             // Safer way to get first item
+
+// Looking at all items
+for number in &numbers {
+    println!("Got number: {}", number);
+}
+```
+
+## 6. Traits and Generics
+
+### What are Traits?
+Traits are like contracts that types can fulfill. They define shared behavior between different types.
+
+### Defining Traits
+```rust
+// Define a contract for what makes something an Animal
+trait Animal {
+    // Every Animal must implement this
+    fn make_sound(&self) -> String;
+    
+    // Animals get this for free
+    fn description(&self) -> String {
+        String::from("Just an animal")
+    }
+}
+
+// Make a Cat type that follows the Animal contract
+struct Cat {
+    name: String,
+}
+
+// Implement the Animal contract for Cat
+impl Animal for Cat {
+    fn make_sound(&self) -> String {
+        String::from("Meow!")           // Cats say meow
+    }
+    
+    fn description(&self) -> String {
+        format!("A cat named {}", self.name)
+    }
+}
+
+// Using our Animal
+let whiskers = Cat { name: String::from("Whiskers") };
+println!("Sound: {}", whiskers.make_sound());      // Prints: Meow!
+println!("Who: {}", whiskers.description());       // Prints: A cat named Whiskers
+```
+
+## 7. Memory Management
+
+### Understanding Ownership
+Rust's most unique feature is its ownership system. Think of it like lending books:
+1. Each value has one owner (like a book has one owner)
+2. When the owner goes away, the value is cleaned up (like donating a book when moving)
+3. You can lend out values (like lending a book), but there are rules
 
 ```rust
 // Ownership example
-let s1 = String::from("hello");
-let s2 = s1; // s1 is moved to s2
-// println!("{}", s1); // This would cause an error
+let s1 = String::from("hello");    // s1 owns the string
+let s2 = s1;                       // Ownership moves to s2
+// println!("{}", s1);             // ❌ Error: s1 no longer owns anything
+
+// Cloning (making a copy)
+let s3 = String::from("hello");
+let s4 = s3.clone();              // Make a copy instead of moving
+println!("{}", s3);               // ✅ OK: s3 still owns its copy
 ```
 
-### References
-Borrow values without taking ownership:
+### References and Borrowing
+References are like lending - you can use something without owning it.
 
 ```rust
-// Function that takes a reference to a String and returns its length
-fn calculate_length(s: &String) -> usize {
-    s.len()
+// Borrowing example
+fn calculate_length(s: &String) -> usize {  // Borrow s temporarily
+    s.len()                                 // Return the length
 }
 
-let s1 = String::from("hello");
-let len = calculate_length(&s1);
+let s = String::from("hello");
+let len = calculate_length(&s);    // Lend s to the function
+println!("{} is {} long", s, len); // s is still ours to use
 ```
 
-For practical examples of these concepts, see our [CLI Projects](../projects/cli/README.md).
+## Next Steps
+Now that you understand the basics, try:
+1. Writing small programs to practice these concepts
+2. Reading the error handling guide
+3. Exploring the standard library documentation
+4. Working on the practical projects in this guide
+
+Remember: Rust's compiler is your friend! When you get errors, read them carefully - they usually tell you exactly how to fix the problem.

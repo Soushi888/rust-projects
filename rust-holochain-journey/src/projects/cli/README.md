@@ -1,25 +1,33 @@
-# CLI Projects
+# CLI Projects in Rust
 
-This subsection focuses on building command-line interface (CLI) applications in Rust, demonstrating fundamental programming concepts and best practices.
+This section covers command-line interface (CLI) development in Rust through two progressive projects:
 
-## Learning Objectives
-- Understand CLI application structure
-- Learn Rust's command-line argument parsing
-- Implement modular and efficient CLI tools
-- Apply Rust's error handling and input validation techniques
+## Project 1: Basic File Reader
 
-## Project Scope
-- Create a simple, practical CLI application
-- Explore Rust's standard library and external crates
-- Implement robust error handling
-- Design a user-friendly command-line interface
+The first project introduces fundamental Rust concepts through a simple file reading application. This project covers:
+- Basic CLI structure and argument parsing
+- File I/O operations
+- Error handling
+- User interaction
 
-## CLI Project Tutorials
+→ [Project Details](./1-basic-file-reader.md)  
+→ [Implementation Guide](./implementation.md)  
+→ [Best Practices](./best-practices.md)
 
-Our CLI project tutorials cover a range of complexity levels and learning objectives:
+## Learning Path
 
-1. **Basic File Reader**: 
-   - Learn fundamental Rust concepts
-   - Practice file I/O and error handling
-   - Understand command-line argument parsing
-   - Build an interactive CLI application
+1. Start with the [Project Overview](./overview.md) to understand CLI development in Rust
+2. Follow the [Implementation Guide](./implementation.md) for detailed code explanations
+3. Study the [Best Practices](./best-practices.md) for CLI development
+4. Complete the [Basic File Reader](./1-basic-file-reader.md) project
+
+## Key Concepts Covered
+
+- Command-line argument parsing
+- File operations and I/O
+- Error handling patterns
+- User input processing
+- Code organization
+- Documentation practices
+
+Each project builds upon the previous one, introducing new concepts while reinforcing fundamental principles of Rust programming.
